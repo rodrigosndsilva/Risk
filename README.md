@@ -1,6 +1,17 @@
 # Risk
 POO Project
 
+## World: 
+
+- [x] Vector of Territories
+- [x] Empire
+- [ ] Events
+
+## Empire: 
+
+- [x] Vector of owned Territories
+- [ ] Vector of Tecnologies
+
 ## Territories: 
 
 - [x] Plain
