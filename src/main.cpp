@@ -1,19 +1,22 @@
 // g++ -std=c++14 -Wall -Wextra -g *.cpp -o main
 
-#include <iostream>
+#include "../include/Interaction.h"
 #include <cstdlib>
 #include <fstream>
+#include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
-#include "../include/World.h"
 using namespace std;
 
-int main() { 
-	World *world = new World();
-	cin.get();
-	world->print();
-
-	delete(world);
-	return 0;
+int main() {
+  cout << "\n\n";
+  World *w = new World();
+  Interaction i(w);
+  int flag = i.setupGame();
+  if (flag != 2) {
+    i.handlegame();
+  }
+  cout << "\n";
+  return 0;
 }

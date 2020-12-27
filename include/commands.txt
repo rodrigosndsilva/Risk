@@ -1,0 +1,4 @@
+create refuge 1
+create fishing 1
+create fortress 1
+listall
