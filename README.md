@@ -14,13 +14,13 @@ POO Project
 
 ## Tecnologies:
 
--[ ] Drones
--[ ] Missiles
--[ ] Defenses
--[ ] Exchange
--[ ] Bank
+- [ ] Drones
+- [ ] Missiles
+- [ ] Defenses
+- [ ] Exchange
+- [ ] Bank
 
 ## Events:
 
--[ ] AbandonatedResource
--[ ] Invasion
+- [ ] AbandonatedResource
+- [ ] Invasion
