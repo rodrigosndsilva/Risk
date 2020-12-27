@@ -52,5 +52,9 @@ void Empire::buymilitary() {
     } else {
       cout << "You have reached maximum military force!" << endl;
     }
+  } else {
+    cout << "you dont have enough gold or products to buy military force! Gold "
+            "- <"
+         << safe << "> | Military - <" << warehouse << ">." << endl;
   }
 }
