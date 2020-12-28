@@ -1,16 +1,34 @@
 # Risk
 POO Project
 
+
+##Data to show in game:
+
+- [ ] Year
+- [x] Turn
+- [ ] Last luck factor generated
+- [x] Conquered territories (name, resistance, production in the current turn)
+- [x] Other territories in the world that have not yet been conquered (name, resistance)
+- [x] Products (value in warehouse, maximum value, production in the current shift)
+- [x] Gold (value in warehouse, maximum value, production in the current shift)
+- [x] Military strength (current value, maximum value)
+- [ ] Existing technologies (name, price, objective summary, acquired / not acquired)
+- [ ] Event that will occur (name, summary of effects)
+- [ ] Final score
+
+
 ## World: 
 
 - [x] Vector of Territories
 - [x] Empire
 - [ ] Events
 
+
 ## Empire: 
 
 - [x] Vector of owned Territories
 - [ ] Vector of Tecnologies
+
 
 ## Territories: 
 
@@ -23,6 +41,7 @@ POO Project
 - [x] Refuge
 - [x] Fishing
 
+
 ## Tecnologies:
 
 - [ ] Drones
@@ -31,10 +50,12 @@ POO Project
 - [ ] Exchange
 - [ ] Bank
 
+
 ## Events:
 
 - [ ] AbandonatedResource
 - [ ] Invasion
+
 
 ## Commands:
 
@@ -63,3 +84,5 @@ POO Project
 - [ ] fevent <event-name> - forces the occurrence of an event indicated by its name, as described in the list indicated above. This command is for DEBUG and test/evaluation.
 - [x] quit - closes the game correctly.
 - [x] help - shows all commands.
+
+
