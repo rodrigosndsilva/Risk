@@ -48,6 +48,7 @@ void Interaction::handlegame() {
 
   cout << "\n\nGame initiated" << endl;
   string command;
+  world->GetEmpire()->collectGoldAndProductsFromTerritories();
 
   do {
     world->updateAllTerritoriesProductions(GetTurn());
@@ -64,7 +65,6 @@ void Interaction::handlegame() {
       return;
     runcommands.push_back(command);
 
-    world->GetEmpire()->collectGoldAndProductsFromTerritories();
     do {
       cout << "Do you want to buy a technology or a military? (yes/no): ";
       getline(cin, command);
@@ -109,7 +109,7 @@ void Interaction::handlegame() {
             handleCommand(command);
           }
         }
-      } while (command != "endbuy" );
+      } while (command != "endbuy");
     }
 
     do {
@@ -159,6 +159,7 @@ int Interaction::handleCommand(string c) {
     return 1;
   }
   if (command[0] == "next" && turn > 0) {
+    world->GetEmpire()->collectGoldAndProductsFromTerritories();
     runcommands.clear();
     cout << "----> Turn " << turn << " over! <----" << endl << endl;
     turn++;

@@ -1,4 +1,6 @@
 create refuge 1
 create fishing 1
 create fortress 1
+create plain 2
+create mountain 2
 listall
