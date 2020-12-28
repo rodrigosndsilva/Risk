@@ -59,12 +59,6 @@ POO Project
 
 ## Commands:
 
-- [ ] Drones
-- [ ] Missiles
-- [ ] Defenses
-- [ ] Exchange
-- [ ] Bank
-
 - [x] load <FileName> - Runs a set of configuration commands in FileName, one per line. 
 - [x] create <type> <n> - Add to the world n territories of a certain type (example: mine, refuge, for a territory of the Mina type or Refugio type) 
 - [x] conquer <name> - Give the empire the order to acquire a certain territory this turn as long as it is available in the world. The name parameter indicates the name of the territory to be conquered (plain1, dune3, etc.). 
