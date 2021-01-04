@@ -5,11 +5,13 @@ World::World() {
   this->empire = new Empire();
   addTerritory(new Territory("SafeHouse", 9, 1, 1, true, 0));
   Technologies.push_back(new Drones("Drones", 4));
-  Technologies.push_back(new Drones("Drones2", 4));
-  // Technologies.push_back(new Missiles("Missiles", 4));
-  // Technologies.push_back(new Defenses("Defenses", 4));
+  Technologies.push_back(new Missiles("Missiles", 4));
+  Technologies.push_back(new Defenses("Defenses", 4));
   // Technologies.push_back(new Exchange("Exchange", 4));
-  // Technologies.push_back(new Bank("Bank", 4));
+  Technologies.push_back(new Bank("Bank", 4));
+  Events.push_back(new AbandonatedResource("AbandonatedResource", 1));
+  Events.push_back(new Invasion("Invasion", 2));
+  Events.push_back(new Alliance("Alliance", 3));
   cout << "Your World is Created\n";
 }
 
@@ -54,14 +56,15 @@ void World::conquerTerritory(const string t) {
   if (empire->GetMilitaryForce() > 0) {
     for (auto *x : Territories) {
       if (t.compare(x->Getname()) == 0) {
-
         if (x->GetConquered()) {
           cout << "This territory is already conquered!" << endl;
           return;
         }
-        if (x->canBeConquered(Territories.size()) == true) {
+        if (x->canBeConquered(empire) == true) {
           /* generate secret number between 1 and 6: */
           int randNum = rand() % 6 + 1;
+          cout << "Luck factor generated when Conquering Territory: " << randNum
+               << endl;
           if (randNum + empire->GetMilitaryForce() >= x->GetResistance()) {
             x->SetConquered(true);
             addEmpireTerritoryOwned(x);
@@ -74,9 +77,7 @@ void World::conquerTerritory(const string t) {
           }
           return;
         } else {
-          cout << "The territory that you want to conquer is an island. You "
-                  "must have at least 5 territories to conquer an island!"
-               << endl;
+
           return;
         }
       }
@@ -116,7 +117,6 @@ void World::conquerTechnology(const string t) {
         }
       }
       if (empire->GetSafe() >= x->GetPrice()) {
-        empire->SetSafe(empire->GetSafe() - x->GetPrice());
         x->activateTecnology(empire);
         x->SetIsAcquire(true);
         empire->addTechnology(x);
@@ -140,7 +140,6 @@ void World::conquerTechnologyDEBUG(const string t) {
           return;
         }
       }
-      empire->SetSafe(empire->GetSafe() - x->GetPrice());
       x->activateTecnology(empire);
       x->SetIsAcquire(true);
       empire->addTechnology(x);
@@ -149,4 +148,14 @@ void World::conquerTechnologyDEBUG(const string t) {
     }
   }
   cout << "No technology with that name!" << endl << endl;
+}
+
+void World::createAnEvent(int turn) {
+  int randNum = rand() % 4 + 1;
+  cout << "Luck factor generated selecting Event: " << randNum << endl;
+  for (auto *x : Events) {
+    if (x->GetNum() == randNum) {
+      x->activateEvent(empire, turn);
+    }
+  }
 }

@@ -10,6 +10,7 @@
 #include <vector>
 
 class Technology;
+class Territory;
 
 class Empire {
   int safe;      // gold

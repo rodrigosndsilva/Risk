@@ -56,10 +56,10 @@ void Interaction::handlegame() {
     do {
       cout << "Conquer a territorry or pass: ";
       getline(cin, command);
-      if (command == "help") {
+      if (command == "help" || command == "listall") {
         handleCommand(command);
       }
-    } while (command == "help");
+    } while (command == "help" || command == "listall");
 
     if (command == "quit")
       return;
@@ -68,10 +68,10 @@ void Interaction::handlegame() {
     do {
       cout << "Do you want to buy a technology or a military? (yes/no): ";
       getline(cin, command);
-      if (command == "help") {
+      if (command == "help"|| command == "listall") {
         handleCommand(command);
       }
-    } while (command == "help");
+    } while (command == "help"|| command == "listall");
     if (command == "quit")
       return;
 
@@ -83,7 +83,7 @@ void Interaction::handlegame() {
         if (command == "quit")
           return;
         if (command != "endbuy") {
-          if (command != "help") {
+          if (command != "help"|| command != "listall") {
             istringstream iss(command);
             vector<string> commands;
             if (command != "") {
@@ -111,6 +111,8 @@ void Interaction::handlegame() {
         }
       } while (command != "endbuy");
     }
+    cout << "\nRandom Event: " << endl;
+    world->createAnEvent(turn);
 
     do {
       cout << "Debug time (type <next> to jump to turn-> " << turn + 1 << "): ";
@@ -148,7 +150,8 @@ int Interaction::handleCommand(string c) {
     cout << "\n\nCommands for the game:\n\nlistall\nlist "
             "<name>\npass\nmoreproduct\nmoregold\nmoremilitary\nacquire "
             "<type>\nsave <name>\nloadgame <name>\ndeletegame "
-            "<name>\nnext\n\nDebug commands:\ntake <terr/tec> <name>\nmodify <gold|prod> N\nevent "
+            "<name>\nnext\n\nDebug commands:\ntake <terr/tec> <name>\nmodify "
+            "<gold|prod> N\nevent "
             "<name-of-event>\n\n";
     return 1;
   }

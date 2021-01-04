@@ -44,9 +44,9 @@ POO Project
 
 ## Tecnologies:
 
-- [ ] Drones
-- [ ] Missiles
-- [ ] Defenses
+- [x] Drones
+- [x] Missiles
+- [x] Defenses - needs only the verification on Events (Invasion)
 - [ ] Exchange
 - [ ] Bank
 
@@ -55,6 +55,7 @@ POO Project
 
 - [ ] AbandonatedResource
 - [ ] Invasion
+- [ ] Alliance
 
 
 ## Commands:

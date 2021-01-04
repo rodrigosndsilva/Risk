@@ -14,11 +14,11 @@ class Fishing : public Territory {
 
 public:
   Fishing(std::string name, int resistance, int productCreation,
-               int goldCreation, bool conquered, int victoryPoints);
+          int goldCreation, bool conquered, int victoryPoints);
   ~Fishing();
   // std::string print() const;
-  bool canBeConquered(int numTerr);
-  void updateTerritoryProduction(int turn) ;
+  bool canBeConquered(Empire *e);
+  void updateTerritoryProduction(int turn);
 
   // gets e sets
   std::string Getname() const override { return name; }

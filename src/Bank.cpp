@@ -1,7 +1,7 @@
-#include "../include/Drones.h"
+#include "../include/Bank.h"
 using namespace std;
 
-Drones::Drones(string name, int price) : Technology(name, price) {
+Bank::Bank(string name, int price) : Technology(name, price) {
   ostringstream os;
   os << "This technology raises the maximum limit of military strength to 5.";
   this->description = os.str();
@@ -9,9 +9,10 @@ Drones::Drones(string name, int price) : Technology(name, price) {
   cout << name << " Tecnology Created!" << endl;
 }
 
-Drones::~Drones() { cout << GetName() << " Tecnology Deleted!" << endl; }
+Bank::~Bank() { cout << GetName() << " Tecnology Deleted!" << endl; }
 
-void Drones::activateTecnology(Empire *e) {
+void Bank::activateTecnology(Empire *e) {
   e->SetSafe(e->GetSafe() - GetPrice());
-  e->SetMaxMilitaryForce(5);
+  e->SetMaxSafe(5);
+  e->SetMaxWarehouse(5);
 }

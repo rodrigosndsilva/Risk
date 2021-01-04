@@ -33,8 +33,8 @@ void Territory::updateTerritoryProduction(int turn) {
   }
 }
 
-bool Territory::canBeConquered(int numTerr) {
-  if (numTerr >= 0)
+bool Territory::canBeConquered(Empire *e) {
+  if (e->GetOwnedTerritories().size() >= 1)
     return true;
   return false;
 }

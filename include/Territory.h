@@ -1,11 +1,14 @@
 #ifndef __TERRITORY_H__
 #define __TERRITORY_H__
+#include "Empire.h"
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
+
+class Empire;
 
 class Territory {
   std::string name;
@@ -19,10 +22,10 @@ public:
   Territory(std::string name, int resistance, int productCreation,
             int goldCreation, bool conquered, int victoryPoints);
   virtual ~Territory();
-  
+
   virtual std::string print() const;
   virtual void updateTerritoryProduction(int turn);
-  virtual bool canBeConquered(int numTerr);
+  virtual bool canBeConquered(Empire *e);
 
   // gets and sets
   virtual std::string Getname() const { return name; }

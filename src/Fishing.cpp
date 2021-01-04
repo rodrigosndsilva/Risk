@@ -15,9 +15,22 @@ Fishing::Fishing(std::string name, int resistance, int productCreation,
 }
 Fishing::~Fishing() { cout << Getname() << " Deleted" << endl; }
 
-bool Fishing::canBeConquered(int numTerr) {
-  if (numTerr >= 5)
-    return true;
+bool Fishing::canBeConquered(Empire *e) {
+  for (auto *x : e->GetOwnedTechnologies()) {
+    if (Getname().compare(x->GetName()) == 0) {
+      if (e->GetOwnedTerritories().size() >= 5) {
+        return true;
+      } else {
+        cout << "The territory that you want to conquer is an island. You "
+                "must have at least 5 territories to conquer an island!"
+             << endl;
+        return false;
+      }
+    }
+  }
+  cout << "The territory that you want to conquer is an island. You "
+          "must have the Missiles Technology to conquer that territory!"
+       << endl;
   return false;
 }
 

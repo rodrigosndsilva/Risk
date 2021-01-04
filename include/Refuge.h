@@ -14,10 +14,10 @@ class Refuge : public Territory {
 
 public:
   Refuge(std::string name, int resistance, int productCreation,
-               int goldCreation, bool conquered, int victoryPoints);
+         int goldCreation, bool conquered, int victoryPoints);
   ~Refuge();
   // std::string print() const;
-  bool canBeConquered(int numTerr);
+  bool canBeConquered(Empire *e);
 
   // gets e sets
   std::string Getname() const override { return name; }

@@ -1,16 +1,23 @@
 #ifndef __WORLD_H__
 #define __WORLD_H__
+#include "AbandonatedResource.h"
+#include "Alliance.h"
+#include "Bank.h"
 #include "Castle.h"
+#include "Defenses.h"
+#include "Drones.h"
 #include "Dune.h"
 #include "Empire.h"
+#include "Event.h"
 #include "Fishing.h"
 #include "Fortress.h"
+#include "Invasion.h"
 #include "Mine.h"
+#include "Missiles.h"
 #include "Mountain.h"
 #include "Plain.h"
 #include "Refuge.h"
 #include "Technology.h"
-#include "Drones.h"
 #include "Territory.h"
 #include <cstdlib>
 #include <fstream>
@@ -22,6 +29,7 @@
 class World {
   std::vector<Territory *> Territories;
   std::vector<Technology *> Technologies;
+  std::vector<Event *> Events;
   Empire *empire;
 
 public:
@@ -36,6 +44,7 @@ public:
   void conquerTerritoryDEBUG(const std::string t);
   void conquerTechnologyDEBUG(const std::string t);
   void conquerTechnology(const std::string t);
+  void createAnEvent(int turn);
 
   // gets and sets
   Empire *GetEmpire() const { return empire; }
