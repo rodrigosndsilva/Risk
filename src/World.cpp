@@ -21,6 +21,8 @@ World::~World() {
     delete x;
   for (auto *y : Technologies)
     delete y;
+  for (auto *z : Events)
+    delete z;
   cout << "World Deleted" << endl;
 }
 void World::addTerritory(Territory *t) {
@@ -152,6 +154,10 @@ void World::conquerTechnologyDEBUG(const string t) {
 
 void World::createAnEvent(int turn) {
   int randNum = rand() % 4 + 1;
+  if (randNum == 4) {
+    cout << "Luck factor generated selecting Event: " << randNum << endl;
+    cout << "No Event in this round!" << endl;
+  }
   cout << "Luck factor generated selecting Event: " << randNum << endl;
   for (auto *x : Events) {
     if (x->GetNum() == randNum) {

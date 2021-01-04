@@ -5,6 +5,7 @@ AbandonatedResource::AbandonatedResource(string name, int num)
     : Event(name, num) {
   this->name = name;
   this->num = num;
+  cout << name << " Event Created!" << endl;
 }
 
 AbandonatedResource::~AbandonatedResource() {

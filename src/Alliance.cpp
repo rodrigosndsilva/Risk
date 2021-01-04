@@ -4,6 +4,7 @@ using namespace std;
 Alliance::Alliance(string name, int num) : Event(name, num) {
   this->name = name;
   this->num = num;
+  cout << name << " Event Created!" << endl;
 }
 
 Alliance::~Alliance() { cout << GetName() << " Deleted!" << endl; }

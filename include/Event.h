@@ -16,7 +16,7 @@ class Event {
 
 public:
   Event(std::string name, int num);
-  ~Event();
+  virtual ~Event();
   virtual void activateEvent(Empire *e, int turn) = 0;
 
   // gets e sets

@@ -6,7 +6,7 @@ POO Project
 
 - [ ] Year
 - [x] Turn
-- [ ] Last luck factor generated
+- [x] Last luck factor generated
 - [x] Conquered territories (name, resistance, production in the current turn)
 - [x] Other territories in the world that have not yet been conquered (name, resistance)
 - [x] Products (value in warehouse, maximum value, production in the current shift)
@@ -20,14 +20,14 @@ POO Project
 ## World: 
 
 - [x] Vector of Territories
-- [x] Empire
-- [ ] Events
+- [x] Vector of Empire
+- [x] Vector of Events
 
 
 ## Empire: 
 
 - [x] Vector of owned Territories
-- [ ] Vector of Tecnologies
+- [x] Vector of Tecnologies
 
 
 ## Territories: 
@@ -48,14 +48,14 @@ POO Project
 - [x] Missiles
 - [x] Defenses - needs only the verification on Events (Invasion)
 - [ ] Exchange
-- [ ] Bank
+- [x] Bank
 
 
 ## Events:
 
-- [ ] AbandonatedResource
-- [ ] Invasion
-- [ ] Alliance
+- [x] AbandonatedResource
+- [x] Invasion
+- [x] Alliance
 
 
 ## Commands:

@@ -4,6 +4,7 @@ using namespace std;
 Invasion::Invasion(string name, int num) : Event(name, num) {
   this->name = name;
   this->num = num;
+  cout << name << " Event Created!" << endl;
 }
 
 Invasion::~Invasion() { cout << GetName() << " Deleted!" << endl; }
@@ -24,10 +25,10 @@ void Invasion::activateEvent(Empire *e, int turn) {
         (e->GetOwnedTerritories().back()->GetResistance() + flag)) {
       e->GetOwnedTerritories().back()->SetConquered(
           false); // coloca o territorio a false
-      e->GetOwnedTerritories()
-          .pop_back(); // remove do vector de territorios conquistados
       cout << "This territory: " << e->GetOwnedTerritories().back()->Getname()
            << " was invaded!" << endl;
+      e->GetOwnedTerritories()
+          .pop_back(); // remove do vector de territorios conquistados
     } else {
       cout << "This territory: <" << e->GetOwnedTerritories().back()->Getname()
            << "> was invaded but won the fight!!" << endl;
@@ -37,10 +38,10 @@ void Invasion::activateEvent(Empire *e, int turn) {
         (e->GetOwnedTerritories().back()->GetResistance() + flag)) {
       e->GetOwnedTerritories().back()->SetConquered(
           false); // coloca o territorio a false
-      e->GetOwnedTerritories()
-          .pop_back(); // remove do vector de territorios conquistados
       cout << "This territory: " << e->GetOwnedTerritories().back()->Getname()
            << " was invaded!" << endl;
+      e->GetOwnedTerritories()
+          .pop_back(); // remove do vector de territorios conquistados
     } else {
       cout << "This territory: <" << e->GetOwnedTerritories().back()->Getname()
            << "> was invaded but won the fight!!" << endl;
