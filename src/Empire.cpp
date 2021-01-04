@@ -15,6 +15,8 @@ Empire::~Empire() { cout << "Empire Deleted\n"; }
 
 void Empire::addownedTerritory(Territory *t) { ownedTerritories.push_back(t); }
 
+void Empire::addTechnology(Technology *t) { ownedTechnologies.push_back(t); }
+
 string Empire::print() const {
   ostringstream os;
   os << "Safe: " << safe << "/" << maxSafe << "\nWarehouse: " << warehouse
@@ -24,6 +26,11 @@ string Empire::print() const {
   os << "Owned Territorys:\n";
   for (auto *x : ownedTerritories) {
     os << " -> " << x->Getname() << endl;
+  }
+
+  os << "Owned Technologies:\n";
+  for (auto *x : ownedTechnologies) {
+    os << " -> " << x->GetName() << endl;
   }
   return os.str();
 }

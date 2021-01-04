@@ -1,5 +1,6 @@
 #ifndef __EMPIRE_H__
 #define __EMPIRE_H__
+#include "Technology.h"
 #include "Territory.h"
 #include <cstdlib>
 #include <fstream>
@@ -7,6 +8,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
+
+class Technology;
 
 class Empire {
   int safe;      // gold
@@ -17,12 +20,14 @@ class Empire {
   int maxMilitaryForce;
 
   std::vector<Territory *> ownedTerritories;
+  std::vector<Technology *> ownedTechnologies;
 
 public:
   Empire();
   ~Empire();
 
   void addownedTerritory(Territory *t);
+  void addTechnology(Technology *t);
   std::string print() const;
   void collectGoldAndProductsFromTerritories();
   void buymilitary();
@@ -43,6 +48,12 @@ public:
   int GetMaxMilitaryForce() const { return maxMilitaryForce; }
   void SetMaxMilitaryForce(int maxMilitaryForce) {
     this->maxMilitaryForce = maxMilitaryForce;
+  }
+  std::vector<Territory *> GetOwnedTerritories() const {
+    return ownedTerritories;
+  }
+  std::vector<Technology *> GetOwnedTechnologies() const {
+    return ownedTechnologies;
   }
 };
 

@@ -4,6 +4,12 @@ using namespace std;
 World::World() {
   this->empire = new Empire();
   addTerritory(new Territory("SafeHouse", 9, 1, 1, true, 0));
+  Technologies.push_back(new Drones("Drones", 4));
+  Technologies.push_back(new Drones("Drones2", 4));
+  // Technologies.push_back(new Missiles("Missiles", 4));
+  // Technologies.push_back(new Defenses("Defenses", 4));
+  // Technologies.push_back(new Exchange("Exchange", 4));
+  // Technologies.push_back(new Bank("Bank", 4));
   cout << "Your World is Created\n";
 }
 
@@ -11,6 +17,8 @@ World::~World() {
   delete (empire);
   for (auto *x : Territories)
     delete x;
+  for (auto *y : Technologies)
+    delete y;
   cout << "World Deleted" << endl;
 }
 void World::addTerritory(Territory *t) {
@@ -26,6 +34,10 @@ void World::addEmpireTerritoryOwned(Territory *t) {
 void World::print() const {
   cout << "\n\nTerritories:\n";
   for (auto *x : Territories) {
+    cout << x->print();
+  }
+  cout << "\nTechnologies:\n";
+  for (auto *x : Technologies) {
     cout << x->print();
   }
   cout << "\nEmpire:\n";
@@ -92,4 +104,49 @@ void World::conquerTerritoryDEBUG(const string t) {
     }
   }
   cout << "No territory with that name!" << endl;
+}
+
+void World::conquerTechnology(const string t) {
+  for (auto *x : Technologies) {
+    if (t.compare(x->GetName()) == 0) {
+      for (auto *y : empire->GetOwnedTechnologies()) {
+        if (t.compare(y->GetName()) == 0) {
+          cout << "You already have that Technology!" << endl << endl;
+          return;
+        }
+      }
+      if (empire->GetSafe() >= x->GetPrice()) {
+        empire->SetSafe(empire->GetSafe() - x->GetPrice());
+        x->activateTecnology(empire);
+        x->SetIsAcquire(true);
+        empire->addTechnology(x);
+        cout << "You bought this technology: " << t << endl << endl;
+        return;
+      } else {
+        cout << "You dont have money to buy this technology" << endl << endl;
+        return;
+      }
+    }
+  }
+  cout << "No technology with that name!" << endl << endl;
+}
+
+void World::conquerTechnologyDEBUG(const string t) {
+  for (auto *x : Technologies) {
+    if (t.compare(x->GetName()) == 0) {
+      for (auto *y : empire->GetOwnedTechnologies()) {
+        if (t.compare(y->GetName()) == 0) {
+          cout << "You already have that Technology!" << endl << endl;
+          return;
+        }
+      }
+      empire->SetSafe(empire->GetSafe() - x->GetPrice());
+      x->activateTecnology(empire);
+      x->SetIsAcquire(true);
+      empire->addTechnology(x);
+      cout << "You acquire this technology: " << t << endl << endl;
+      return;
+    }
+  }
+  cout << "No technology with that name!" << endl << endl;
 }

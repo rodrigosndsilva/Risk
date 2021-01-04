@@ -140,15 +140,15 @@ int Interaction::handleCommand(string c) {
   }
   if (command[0] == "help" && turn == 0) {
     cout << "\n\nCommands for the configurations:\n\nload <File-Name>\ncreate "
-            "<type> <n>\nconquer <name>\nendsetup -> To complete Game "
+            "<type> <n>\ntake <terr/tec> <name>\nendsetup -> To complete Game "
             "setup.\n\n";
     return 1;
   }
   if (command[0] == "help" && turn > 0) {
     cout << "\n\nCommands for the game:\n\nlistall\nlist "
-            "<name>\npass\nmoreproduct\nmoremilitary\nacquire "
-            "<type>\nnext\nsave <name>\nloadgame <name>\ndeletegame "
-            "<name>\ntake <which> <name>\nmodify <gold|prod> N\nevent "
+            "<name>\npass\nmoreproduct\nmoregold\nmoremilitary\nacquire "
+            "<type>\nsave <name>\nloadgame <name>\ndeletegame "
+            "<name>\nnext\n\nDebug commands:\ntake <terr/tec> <name>\nmodify <gold|prod> N\nevent "
             "<name-of-event>\n\n";
     return 1;
   }
@@ -219,7 +219,7 @@ int Interaction::handleCommand(string c) {
     }
 
     if (command[1] == "tec") {
-      // world->conquerTerritoryDEBUG(command[1]);
+      world->conquerTechnologyDEBUG(command[2]);
     }
 
     return 1;

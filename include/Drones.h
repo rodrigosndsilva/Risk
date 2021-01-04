@@ -8,12 +8,21 @@
 #include <string>
 #include <vector>
 
-class Drones : public Technology {
-public:
-  Drones(int price);
-  ~Drones();
+class Technology;
+class Empire;
 
-  
+class Drones : public Technology {
+  std::string name;
+  std::string description;
+
+public:
+  Drones(std::string name, int price);
+  ~Drones();
+  void activateTecnology(Empire *e) override;
+
+  // gets e sets
+  std::string GetDescription() const { return description; }
+  std::string GetName() const { return name; }
 };
 
 #endif // __DRONES_H__
