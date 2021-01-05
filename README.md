@@ -2,7 +2,7 @@
 POO Project
 
 
-##Data to show in game:
+## Data to show in game:
 
 - [ ] Year
 - [x] Turn
