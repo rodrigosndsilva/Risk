@@ -3,7 +3,8 @@ using namespace std;
 
 Defenses::Defenses(string name, int price) : Technology(name, price) {
   ostringstream os;
-  os << "This technology raises the maximum limit of military strength to 5.";
+  os << "Adds 1 unit to the resistance of the invaded territory during an "
+        "invasion event.";
   this->description = os.str();
   this->name = name;
   cout << name << " Tecnology Created!" << endl;

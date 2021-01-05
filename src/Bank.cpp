@@ -3,7 +3,8 @@ using namespace std;
 
 Bank::Bank(string name, int price) : Technology(name, price) {
   ostringstream os;
-  os << "This technology raises the maximum limit of military strength to 5.";
+  os << "This technology allows the storage capacity of the warehouse and the "
+        "empire vault to be increased by two units.";
   this->description = os.str();
   this->name = name;
   cout << name << " Tecnology Created!" << endl;

@@ -3,7 +3,7 @@ using namespace std;
 
 Missiles::Missiles(string name, int price) : Technology(name, price) {
   ostringstream os;
-  os << "This technology raises the maximum limit of military strength to 5.";
+  os << "This technology serves to conquer islands.";
   this->description = os.str();
   this->name = name;
   cout << name << " Tecnology Created!" << endl;
