@@ -29,6 +29,7 @@ public:
 
   void addownedTerritory(Territory *t);
   void addTechnology(Technology *t);
+  void removelastTerritory();
   std::string print() const;
   void collectGoldAndProductsFromTerritories();
   void buymilitary();

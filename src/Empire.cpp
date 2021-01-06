@@ -17,6 +17,8 @@ void Empire::addownedTerritory(Territory *t) { ownedTerritories.push_back(t); }
 
 void Empire::addTechnology(Technology *t) { ownedTechnologies.push_back(t); }
 
+void Empire::removelastTerritory() { ownedTerritories.pop_back(); }
+
 string Empire::print() const {
   ostringstream os;
   os << "Safe: " << safe << "/" << maxSafe << "\nWarehouse: " << warehouse
@@ -37,12 +39,12 @@ string Empire::print() const {
 
 void Empire::collectGoldAndProductsFromTerritories() {
   for (auto *x : ownedTerritories) {
-    if (safe != maxSafe) {
+    if (safe + x->GetGoldCreation() <= maxSafe) {
       safe += x->GetGoldCreation();
     }
   }
   for (auto *x : ownedTerritories) {
-    if (warehouse != maxWarehouse) {
+    if (warehouse + x->GetProductCreation() <= maxWarehouse) {
       warehouse += x->GetProductCreation();
     }
   }

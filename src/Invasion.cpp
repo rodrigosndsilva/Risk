@@ -27,8 +27,8 @@ void Invasion::activateEvent(Empire *e, int turn) {
           false); // coloca o territorio a false
       cout << "This territory: " << e->GetOwnedTerritories().back()->Getname()
            << " was invaded!" << endl;
-      e->GetOwnedTerritories()
-          .pop_back(); // remove do vector de territorios conquistados
+      e->removelastTerritory(); // remove do vector o ultimo territorio
+                                // conquistado
     } else {
       cout << "This territory: <" << e->GetOwnedTerritories().back()->Getname()
            << "> was invaded but won the fight!!" << endl;
@@ -40,8 +40,8 @@ void Invasion::activateEvent(Empire *e, int turn) {
           false); // coloca o territorio a false
       cout << "This territory: " << e->GetOwnedTerritories().back()->Getname()
            << " was invaded!" << endl;
-      e->GetOwnedTerritories()
-          .pop_back(); // remove do vector de territorios conquistados
+      e->removelastTerritory(); // remove do vector o ultimo territorio
+                                // conquistado
     } else {
       cout << "This territory: <" << e->GetOwnedTerritories().back()->Getname()
            << "> was invaded but won the fight!!" << endl;

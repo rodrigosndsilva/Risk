@@ -4,11 +4,11 @@ using namespace std;
 World::World() {
   this->empire = new Empire();
   addTerritory(new Territory("SafeHouse", 9, 1, 1, true, 0));
-  Technologies.push_back(new Drones("Drones", 4));
+  Technologies.push_back(new Drones("Drones", 3));
   Technologies.push_back(new Missiles("Missiles", 4));
   Technologies.push_back(new Defenses("Defenses", 4));
-  // Technologies.push_back(new Exchange("Exchange", 4));
-  Technologies.push_back(new Bank("Bank", 4));
+  // Technologies.push_back(new Exchange("Exchange", 2));
+  Technologies.push_back(new Bank("Bank", 3));
   Events.push_back(new AbandonatedResource("AbandonatedResource", 1));
   Events.push_back(new Invasion("Invasion", 2));
   Events.push_back(new Alliance("Alliance", 3));

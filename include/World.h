@@ -30,6 +30,7 @@ class World {
   std::vector<Territory *> Territories;
   std::vector<Technology *> Technologies;
   std::vector<Event *> Events;
+
   Empire *empire;
 
 public:
@@ -49,6 +50,8 @@ public:
   // gets and sets
   Empire *GetEmpire() const { return empire; }
   void SetEmpire(Empire *empire) { empire = empire; }
+  std::vector<Event *> GetEvents() const { return Events; }
+  std::vector<Territory *> GetTerritories() const { return Territories; }
 };
 
 #endif // __WORLD_H__

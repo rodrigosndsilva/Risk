@@ -4,6 +4,7 @@ using namespace std;
 Interaction::Interaction(World *world) {
   this->world = world;
   turn = 0;
+  year = 1;
   cout << "Interaction Created \n " << endl;
 }
 
@@ -68,10 +69,10 @@ void Interaction::handlegame() {
     do {
       cout << "Do you want to buy a technology or a military? (yes/no): ";
       getline(cin, command);
-      if (command == "help"|| command == "listall") {
+      if (command == "help" || command == "listall") {
         handleCommand(command);
       }
-    } while (command == "help"|| command == "listall");
+    } while (command == "help" || command == "listall");
     if (command == "quit")
       return;
 
@@ -83,7 +84,7 @@ void Interaction::handlegame() {
         if (command == "quit")
           return;
         if (command != "endbuy") {
-          if (command != "help"|| command != "listall") {
+          if (command != "help" || command != "listall") {
             istringstream iss(command);
             vector<string> commands;
             if (command != "") {
@@ -151,23 +152,38 @@ int Interaction::handleCommand(string c) {
             "<name>\npass\nmoreproduct\nmoregold\nmoremilitary\nacquire "
             "<type>\nsave <name>\nloadgame <name>\ndeletegame "
             "<name>\nnext\n\nDebug commands:\ntake <terr/tec> <name>\nmodify "
-            "<gold|prod> N\nevent "
+            "<gold|prod> N\nfevent "
             "<name-of-event>\n\n";
     return 1;
   }
-  if (command[0] == "pass" && turn > 0) {
-    cout << "You chose the pass option, that is, no territory was conquered "
-            "this turn!"
-         << endl;
+
+  if (command[0] == "listall") {
+    print();
     return 1;
   }
-  if (command[0] == "next" && turn > 0) {
-    world->GetEmpire()->collectGoldAndProductsFromTerritories();
-    runcommands.clear();
-    cout << "----> Turn " << turn << " over! <----" << endl << endl;
-    turn++;
+  if (command[0] == "list") {
+    if (command.size() != 2) {
+      return 0;
+    }
+    for (auto *x : world->GetTerritories()) {
+      if (x->Getname() == command[1]) {
+        cout << x->print() << endl;
+      }
+    }
     return 1;
   }
+
+  // setup commands
+  if (command[0] == "load" && turn == 0) {
+    if (command.size() != 2) {
+      return 0;
+    }
+    if (loadFile(command[1]) == 2) {
+      return 2;
+    }
+    return 1;
+  }
+
   if (command[0] == "create") {
     if (command.size() != 3) {
       return 0;
@@ -206,6 +222,8 @@ int Interaction::handleCommand(string c) {
     }
     return 1;
   }
+
+  // game commands
   if (command[0] == "conquer" && turn > 0) {
     if (command.size() != 2) {
       return 0;
@@ -213,6 +231,98 @@ int Interaction::handleCommand(string c) {
     world->conquerTerritory(command[1]);
     return 1;
   }
+
+  if (command[0] == "pass" && turn > 0) {
+    cout << "You chose the pass option, that is, no territory was conquered "
+            "this turn!"
+         << endl;
+    return 1;
+  }
+  if (command[0] == "next" && turn > 0) {
+    world->GetEmpire()->collectGoldAndProductsFromTerritories();
+    if (turn > 6)
+      year = 2;
+    runcommands.clear();
+    cout << "----> Turn " << turn << " over! <----" << endl << endl;
+    turn++;
+    return 1;
+  }
+
+  if (command[0] == "moremilitary" && turn > 0) {
+    world->GetEmpire()->buymilitary();
+    return 1;
+  }
+
+  if (command[0] == "moregold" && turn > 0) {
+    if (world->GetEmpire()->GetWarehouse() >= 2) {
+      world->GetEmpire()->SetWarehouse(world->GetEmpire()->GetWarehouse() - 2);
+      if (world->GetEmpire()->GetSafe() < world->GetEmpire()->GetMaxSafe())
+        world->GetEmpire()->SetSafe(world->GetEmpire()->GetSafe() + 1);
+      cout << "You traded 2 products for 1 more gold!" << endl << endl;
+    }
+    return 1;
+  }
+
+  if (command[0] == "moreprod" && turn > 0) {
+    if (world->GetEmpire()->GetSafe() >= 2) {
+      world->GetEmpire()->SetSafe(world->GetEmpire()->GetSafe() - 2);
+      if (world->GetEmpire()->GetWarehouse() <
+          world->GetEmpire()->GetMaxWarehouse())
+        world->GetEmpire()->SetWarehouse(world->GetEmpire()->GetWarehouse() +
+                                         1);
+      cout << "You traded 2 golds for 1 more product!" << endl << endl;
+    }
+    return 1;
+  }
+
+  // debug Commands
+  if (command[0] == "modify") {
+    if (command.size() != 3) {
+      return 0;
+    }
+    if (command[1] == "gold") {
+      if ((stoi(command[2]) <= world->GetEmpire()->GetMaxSafe()) &&
+          (stoi(command[2]) >= 0)) {
+        world->GetEmpire()->SetSafe(stoi(command[2]));
+        cout << "You modify you gold to: " << stoi(command[2]) << endl << endl;
+      }
+    }
+
+    if (command[1] == "prod") {
+      if ((stoi(command[2]) <= world->GetEmpire()->GetMaxWarehouse()) &&
+          (stoi(command[2]) >= 0)) {
+        world->GetEmpire()->SetWarehouse(stoi(command[2]));
+        cout << "You modify you products to: " << stoi(command[2]) << endl
+             << endl;
+      }
+    }
+
+    return 1;
+  }
+
+  if (command[0] == "fevent" && turn > 0) {
+    if (command.size() != 2) {
+      return 0;
+    }
+    for (auto *x : world->GetEvents()) {
+      if (x->GetName() == command[1]) {
+        x->activateEvent(world->GetEmpire(), turn);
+        cout << "Event was forced successfully!" << endl << endl;
+        return 1;
+      }
+    }
+    cout << "No Event with that name!" << endl << endl;
+    return 1;
+  }
+
+  if (command[0] == "acquire" && turn > 0) {
+    if (command.size() != 2) {
+      return 0;
+    }
+    world->conquerTechnology(command[1]);
+    return 1;
+  }
+
   if (command[0] == "take") {
     if (command.size() != 3) {
       return 0;
@@ -227,23 +337,7 @@ int Interaction::handleCommand(string c) {
 
     return 1;
   }
-  if (command[0] == "moremilitary" && turn > 0) {
-    world->GetEmpire()->buymilitary();
-    return 1;
-  }
-  if (command[0] == "listall") {
-    world->print();
-    return 1;
-  }
-  if (command[0] == "load" && turn == 0) {
-    if (command.size() != 2) {
-      return 0;
-    }
-    if (loadFile(command[1]) == 2) {
-      return 2;
-    }
-    return 1;
-  }
+
   return 0;
 }
 
@@ -267,7 +361,7 @@ int Interaction::loadFile(string name) {
 }
 
 void Interaction::print() const {
-  cout << "\nTurn: " << turn;
+  cout << "\nYear: " << year << "\t\t\tTurn: " << turn;
   world->print();
   cout << "Type <help> to see all commands.\n" << endl;
 }

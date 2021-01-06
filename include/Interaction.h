@@ -9,6 +9,8 @@
 #include <vector>
 class Interaction {
   int turn;
+  int year;
+
   std::vector<std::string> runcommands;
   World *world;
 
@@ -27,6 +29,8 @@ public:
   // gets e sets
   int GetTurn() { return turn; }
   World *GetWorld() const { return world; }
+  int GetYear() const { return year; }
+  void SetYear(int year) { this->year = year; }
 };
 
 #endif // __INTERACTION_H__
