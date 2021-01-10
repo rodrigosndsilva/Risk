@@ -14,7 +14,7 @@ POO Project
 - [x] Military strength (current value, maximum value)
 - [x] Existing technologies (name, price, objective summary, acquired / not acquired)
 - [x] Event that will occur (name, summary of effects)
-- [ ] Final score
+- [x] Final score
 
 
 ## World: 
@@ -47,7 +47,7 @@ POO Project
 - [x] Drones
 - [x] Missiles
 - [x] Defenses
-- [ ] Exchange
+- [x] Exchange
 - [x] Bank
 
 
