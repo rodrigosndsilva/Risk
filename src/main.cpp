@@ -11,7 +11,7 @@ using namespace std;
 
 int main() {
   cout << "\n\n";
-  World *w = new World();
+  World *w = new World("DefaultWorld");
   Interaction i(w);
   int flag = i.setupGame();
   if (flag != 2) {

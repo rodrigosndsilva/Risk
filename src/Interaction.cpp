@@ -3,13 +3,13 @@ using namespace std;
 
 Interaction::Interaction(World *world) {
   this->world = world;
-  turn = 0;
-  year = 1;
+  saveWorlds.push_back(world);
   cout << "Interaction Created \n " << endl;
 }
 
 Interaction::~Interaction() {
-  delete (world);
+  for (auto *x : saveWorlds)
+    delete x;
   cout << "Interaction Deleted \n " << endl;
 }
 
@@ -40,41 +40,115 @@ int Interaction::setupGame() {
         return flag;
     }
   } while (command != "quit" && command != "endsetup");
-  turn++;
+  world->SetTurn(world->GetTurn() + 1);
   return flag;
 }
 
+vector<string> Interaction::splitSentenceIntoWords(string c) {
+  istringstream iss(c);
+  vector<string> commands;
+  if (c != "") {
+    for (string arg; iss >> arg;) {
+      commands.push_back(arg);
+    }
+  }
+  return commands;
+}
+
 void Interaction::handlegame() {
-  int flagmilitar = 0, flagtecnology = 0;
+  string command;
+  vector<string> commands;
+  int flagmilitar = 0, flagtecnology = 0, flag = 0;
 
   cout << "\n\nGame initiated" << endl;
-  string command;
-  world->GetEmpire()->collectGoldAndProductsFromTerritories();
 
+  // Fase 1
   do {
-    world->updateAllTerritoriesProductions(GetTurn());
+    flag = 0;
+
+    world->updateAllTerritoriesProductions();
+    world->GetEmpire()->collectGoldAndProductsFromTerritories();
+
     print();
     do {
-      cout << "Conquer a territorry or pass: ";
+      cout << "Fase 1 -> Conquer a territorry or pass: ";
       getline(cin, command);
+      if (command == "quit")
+        return;
+      if (command != "") {
+        commands = splitSentenceIntoWords(command);
+      }
       if (command == "help" || command == "listall") {
         handleCommand(command);
       }
-    } while (command == "help" || command == "listall");
+      if (commands[0] == "conquer" || command == "pass")
+        flag = 1;
+    } while (command == "help" || command == "listall" || flag == 0);
 
-    if (command == "quit")
-      return;
     runcommands.push_back(command);
+    flag = 0;
 
+    // Fase 2
+    for (auto *x : world->GetEmpire()->GetOwnedTechnologies()) {
+      if (x->GetName() == "Exchange") {
+        do {
+          cout << "Fase 2 -> Do you want to trade gold or products? "
+                  "(yes/no): ";
+          getline(cin, command);
+          if (command == "quit")
+            return;
+          if (command != "") {
+            commands = splitSentenceIntoWords(command);
+          }
+          if (command == "help" || command == "listall") {
+            handleCommand(command);
+          }
+          if (command == "yes" || command == "no")
+            flag = 1;
+
+        } while (command == "help" || command == "listall" || flag == 0);
+
+        if (command == "yes") {
+          do {
+            cout << "Trade gold for products or vice versa (moregold "
+                    "/ "
+                    "moreproduct): ";
+            getline(cin, command);
+            if (command == "quit")
+              return;
+            if (command == "moregold" || command == "moreproduct") {
+              handleCommand(command);
+              flag = 1;
+            }
+          } while (command == "help" || command == "listall" || flag == 0);
+          break;
+        }
+      }
+    }
+    if (flag != 1) {
+      cout << "Fase 2 -> You dont have de Exchange technology, so you can not "
+              "trade gold/products!"
+           << endl;
+    }
+    flag = 0;
+
+    // Fase 3
     do {
-      cout << "Do you want to buy a technology or a military? (yes/no): ";
+      cout << "Fase 3 -> Do you want to buy a technology or a military? "
+              "(yes/no): ";
       getline(cin, command);
+      if (command == "quit")
+        return;
+      if (command != "") {
+        commands = splitSentenceIntoWords(command);
+      }
       if (command == "help" || command == "listall") {
         handleCommand(command);
       }
-    } while (command == "help" || command == "listall");
-    if (command == "quit")
-      return;
+      if (command == "yes" || command == "no")
+        flag = 1;
+
+    } while (command == "help" || command == "listall" || flag == 0);
 
     if (command == "yes") {
       flagmilitar = 0, flagtecnology = 0;
@@ -107,53 +181,113 @@ void Interaction::handlegame() {
               }
             }
           } else {
-            handleCommand(command);
+            if (command != "")
+              handleCommand(command);
           }
         }
       } while (command != "endbuy");
     }
-    cout << "\nRandom Event: " << endl;
-    world->createAnEvent(turn);
 
+    // Fase 4
+    cout << "\nFase 4 -> Random Event: " << endl;
+    world->createAnEvent(world->GetTurn());
+
+    // Debug Fase
     do {
-      cout << "Debug time (type <next> to jump to turn-> " << turn + 1 << "): ";
+      cout << "Debug time (type <next> to jump to turn-> "
+           << world->GetTurn() + 1 << "): ";
       getline(cin, command);
+      if (command == "quit")
+        return;
       cout << endl;
+
       if (command == "next")
         runcommands.push_back(command);
-      else
-        handleCommand(command);
+      else {
+        if (command != "")
+          flag = handleCommand(command);
+      }
+      if (flag == 0) {
+        cout << "Command not found!" << endl;
+      }
+
+      if (flag == 2)
+        return;
+
     } while (command != "quit" && command != "next");
     runAllCommands();
+    if (world->GetTurn() == 13)
+      break;
   } while (command != "quit");
+  if (world->GetTurn() > 12)
+    winGame();
+}
+
+void Interaction::winGame() {
+  int contTec = 0, sumterr = 0, sumtec = 0, sumAll = 0;
+  unsigned int contTerr = 0;
+
+  cout << "\n\n---> Game Ended <---" << endl << endl;
+  cout << "---> Territories Conquered <---" << endl;
+  for (auto *x : world->GetEmpire()->GetOwnedTerritories()) {
+    cout << " -> " << x->Getname()
+         << "\tVictory Points: " << x->GetVictoryPoints() << endl;
+    sumterr += x->GetVictoryPoints();
+    contTerr++;
+  }
+  cout << "\n---> Technologies Conquered <---" << endl;
+  for (auto *y : world->GetEmpire()->GetOwnedTechnologies()) {
+    cout << " -> " << y->GetName() << "\tVictory Points: 1" << endl;
+    sumtec += 1;
+    contTec++;
+  }
+  sumAll = sumtec + sumterr;
+  cout << "\n---> Final score <---" << endl << endl;
+  cout << sumterr << "+ -> sum of victory points for all Territories." << endl;
+  cout << sumtec << "+ -> sum of victory points for all Technologies." << endl;
+  if (contTec == 5) {
+    cout << "1+ -> 5 technologies acquired (scientific bonus)." << endl;
+    sumAll += 1;
+  }
+
+  if (contTerr == world->GetTerritories().size()) {
+    cout << "3+ -> you have all terrains ( " << contTerr
+         << " territories) in the world are part of the empire (supreme "
+            "emperor). "
+         << endl;
+    sumAll += 3;
+  }
+  cout << endl << sumAll << " -> Final Score!" << endl;
+}
+
+int Interaction::loseGame() {
+  cout << "\n\n---> You lost the game <---" << endl;
+  cout << "Your last territory was defeated <SafeHouse>" << endl;
+  cout << "Game Ended!" << endl << endl;
+  return 2;
 }
 
 int Interaction::handleCommand(string c) {
-  istringstream iss(c);
   vector<string> command;
-  if (c == "") {
-    return 0;
-  }
-  for (string arg; iss >> arg;) {
-    command.push_back(arg);
-  }
+  command = splitSentenceIntoWords(c);
 
   if (command[0] == "quit") {
     return 2;
   }
-  if (command[0] == "help" && turn == 0) {
+  if (command[0] == "help" && world->GetTurn() == 0) {
     cout << "\n\nCommands for the configurations:\n\nload <File-Name>\ncreate "
             "<type> <n>\ntake <terr/tec> <name>\nendsetup -> To complete Game "
             "setup.\n\n";
     return 1;
   }
-  if (command[0] == "help" && turn > 0) {
+  if (command[0] == "help" && world->GetTurn() > 0) {
     cout << "\n\nCommands for the game:\n\nlistall\nlist "
             "<name>\npass\nmoreproduct\nmoregold\nmoremilitary\nacquire "
             "<type>\nsave <name>\nloadgame <name>\ndeletegame "
             "<name>\nnext\n\nDebug commands:\ntake <terr/tec> <name>\nmodify "
-            "<gold|prod> N\nfevent "
-            "<name-of-event>\n\n";
+            "<gold|prod> N\ncreate "
+            "<type>\nfevent "
+            "<name-of-event>\njumpturn <turn_number>\n\n";
     return 1;
   }
 
@@ -174,7 +308,7 @@ int Interaction::handleCommand(string c) {
   }
 
   // setup commands
-  if (command[0] == "load" && turn == 0) {
+  if (command[0] == "load") {
     if (command.size() != 2) {
       return 0;
     }
@@ -224,7 +358,7 @@ int Interaction::handleCommand(string c) {
   }
 
   // game commands
-  if (command[0] == "conquer" && turn > 0) {
+  if (command[0] == "conquer" && world->GetTurn() > 0) {
     if (command.size() != 2) {
       return 0;
     }
@@ -232,28 +366,27 @@ int Interaction::handleCommand(string c) {
     return 1;
   }
 
-  if (command[0] == "pass" && turn > 0) {
+  if (command[0] == "pass" && world->GetTurn() > 0) {
     cout << "You chose the pass option, that is, no territory was conquered "
             "this turn!"
          << endl;
     return 1;
   }
-  if (command[0] == "next" && turn > 0) {
-    world->GetEmpire()->collectGoldAndProductsFromTerritories();
-    if (turn > 6)
-      year = 2;
+  if (command[0] == "next" && world->GetTurn() > 0) {
     runcommands.clear();
-    cout << "----> Turn " << turn << " over! <----" << endl << endl;
-    turn++;
+    cout << "----> Turn " << world->GetTurn() << " over! <----" << endl << endl;
+    world->SetTurn(world->GetTurn() + 1);
+    if (world->GetTurn() > 6)
+      world->SetYear(2);
     return 1;
   }
 
-  if (command[0] == "moremilitary" && turn > 0) {
+  if (command[0] == "moremilitary" && world->GetTurn() > 0) {
     world->GetEmpire()->buymilitary();
     return 1;
   }
 
-  if (command[0] == "moregold" && turn > 0) {
+  if (command[0] == "moregold" && world->GetTurn() > 0) {
     if (world->GetEmpire()->GetWarehouse() >= 2) {
       world->GetEmpire()->SetWarehouse(world->GetEmpire()->GetWarehouse() - 2);
       if (world->GetEmpire()->GetSafe() < world->GetEmpire()->GetMaxSafe())
@@ -263,7 +396,7 @@ int Interaction::handleCommand(string c) {
     return 1;
   }
 
-  if (command[0] == "moreprod" && turn > 0) {
+  if (command[0] == "moreprod" && world->GetTurn() > 0) {
     if (world->GetEmpire()->GetSafe() >= 2) {
       world->GetEmpire()->SetSafe(world->GetEmpire()->GetSafe() - 2);
       if (world->GetEmpire()->GetWarehouse() <
@@ -276,6 +409,19 @@ int Interaction::handleCommand(string c) {
   }
 
   // debug Commands
+  if (command[0] == "jumpturn" && world->GetTurn() > 0) {
+    if (command.size() != 2) {
+      return 0;
+    }
+    world->SetTurn(stoi(command[1]));
+    if (stoi(command[1]) <= 6) {
+      world->SetYear(1);
+    } else {
+      world->SetYear(2);
+    }
+    return 1;
+  }
+
   if (command[0] == "modify") {
     if (command.size() != 3) {
       return 0;
@@ -300,14 +446,18 @@ int Interaction::handleCommand(string c) {
     return 1;
   }
 
-  if (command[0] == "fevent" && turn > 0) {
+  if (command[0] == "fevent" && world->GetTurn() > 0) {
     if (command.size() != 2) {
       return 0;
     }
     for (auto *x : world->GetEvents()) {
       if (x->GetName() == command[1]) {
-        x->activateEvent(world->GetEmpire(), turn);
+        x->activateEvent(world->GetEmpire(), world->GetTurn());
         cout << "Event was forced successfully!" << endl << endl;
+        if (world->GetEmpire()->GetOwnedTerritories().size() == 0) {
+          loseGame();
+          return 2;
+        }
         return 1;
       }
     }
@@ -315,7 +465,7 @@ int Interaction::handleCommand(string c) {
     return 1;
   }
 
-  if (command[0] == "acquire" && turn > 0) {
+  if (command[0] == "acquire" && world->GetTurn() > 0) {
     if (command.size() != 2) {
       return 0;
     }
@@ -335,6 +485,13 @@ int Interaction::handleCommand(string c) {
       world->conquerTechnologyDEBUG(command[2]);
     }
 
+    return 1;
+  }
+  if (command[0] == "save") {
+    if (command.size() != 2) {
+      return 0;
+    }
+    saveWorld(command[1]);
     return 1;
   }
 
@@ -361,7 +518,17 @@ int Interaction::loadFile(string name) {
 }
 
 void Interaction::print() const {
-  cout << "\nYear: " << year << "\t\t\tTurn: " << turn;
+  cout << "\nYear: " << world->GetYear() << "\t\t\tTurn: " << world->GetTurn()
+       << endl
+       << endl;
+  cout << "Save Worlds:" << endl;
+  for (auto *x : saveWorlds) {
+    cout << x->GetName() << endl;
+  }
   world->print();
   cout << "Type <help> to see all commands.\n" << endl;
+}
+
+void Interaction::saveWorld(string name) {
+  saveWorlds.push_back(new World(*world, name));
 }

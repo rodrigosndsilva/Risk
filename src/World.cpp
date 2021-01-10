@@ -1,18 +1,27 @@
 #include "../include/World.h"
 using namespace std;
 
-World::World() {
+World::World(string name) {
   this->empire = new Empire();
   addTerritory(new Territory("SafeHouse", 9, 1, 1, true, 0));
   Technologies.push_back(new Drones("Drones", 3));
   Technologies.push_back(new Missiles("Missiles", 4));
   Technologies.push_back(new Defenses("Defenses", 4));
-  // Technologies.push_back(new Exchange("Exchange", 2));
+  Technologies.push_back(new Exchange("Exchange", 2));
   Technologies.push_back(new Bank("Bank", 3));
   Events.push_back(new AbandonatedResource("AbandonatedResource", 1));
   Events.push_back(new Invasion("Invasion", 2));
   Events.push_back(new Alliance("Alliance", 3));
+  turn = 0;
+  year = 1;
+  this->name = name;
   cout << "Your World is Created\n";
+}
+
+World::World(const World &w, string name) {
+  cout << "Copying constructor of World." << endl;
+  *this = w;
+  this->name = name;
 }
 
 World::~World() {
@@ -23,7 +32,7 @@ World::~World() {
     delete y;
   for (auto *z : Events)
     delete z;
-  cout << "World Deleted" << endl;
+  cout << name << " Deleted" << endl;
 }
 void World::addTerritory(Territory *t) {
   Territories.push_back(t);
@@ -48,7 +57,7 @@ void World::print() const {
   cout << empire->print() << endl << endl;
 }
 
-void World::updateAllTerritoriesProductions(int turn) {
+void World::updateAllTerritoriesProductions() {
   for (auto *x : Territories) {
     x->updateTerritoryProduction(turn);
   }
@@ -143,6 +152,7 @@ void World::conquerTechnologyDEBUG(const string t) {
         }
       }
       x->activateTecnology(empire);
+      empire->SetSafe(empire->GetSafe() + x->GetPrice());
       x->SetIsAcquire(true);
       empire->addTechnology(x);
       cout << "You acquire this technology: " << t << endl << endl;

@@ -9,6 +9,7 @@
 #include "Dune.h"
 #include "Empire.h"
 #include "Event.h"
+#include "Exchange.h"
 #include "Fishing.h"
 #include "Fortress.h"
 #include "Invasion.h"
@@ -27,6 +28,10 @@
 #include <vector>
 
 class World {
+  int turn;
+  int year;
+  std::string name;
+
   std::vector<Territory *> Territories;
   std::vector<Technology *> Technologies;
   std::vector<Event *> Events;
@@ -34,11 +39,11 @@ class World {
   Empire *empire;
 
 public:
-  World(const World &w) = delete;
-  World();
+  World(const World &w, std::string name);
+  World(std::string name);
   ~World();
   void print() const;
-  void updateAllTerritoriesProductions(int turn);
+  void updateAllTerritoriesProductions();
   void addTerritory(Territory *t);
   void addEmpireTerritoryOwned(Territory *t);
   void conquerTerritory(const std::string t);
@@ -52,6 +57,12 @@ public:
   void SetEmpire(Empire *empire) { empire = empire; }
   std::vector<Event *> GetEvents() const { return Events; }
   std::vector<Territory *> GetTerritories() const { return Territories; }
+  int GetTurn() { return turn; }
+  void SetTurn(int turn) { this->turn = turn; }
+  int GetYear() const { return year; }
+  void SetYear(int year) { this->year = year; }
+  std::string GetName() const { return name; }
+  void SetName(std::string name) { this->name = name; }
 };
 
 #endif // __WORLD_H__

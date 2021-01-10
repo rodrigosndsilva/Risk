@@ -14,8 +14,8 @@ Technology::~Technology() {
 string Technology::print() const {
   ostringstream os;
   os << "Name: " << GetName() << "\t\tPrice (Gold): " << GetPrice()
-     << "\t\tResume: " << GetDescription() << "\t\tAcquire: " << GetIsAcquire()
-     << "\tVictory Points: 1" << endl;
+     << "\t\tAcquire: " << GetIsAcquire() << "\t\tVictory Points: 1"
+     << "\t\tResume: " << GetDescription() << endl;
   ;
   return os.str();
 }

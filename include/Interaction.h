@@ -8,11 +8,11 @@
 #include <string>
 #include <vector>
 class Interaction {
-  int turn;
-  int year;
+
+  World *world;
 
   std::vector<std::string> runcommands;
-  World *world;
+  std::vector<World *> saveWorlds;
 
 public:
   Interaction(World *world);
@@ -25,12 +25,13 @@ public:
   int loadFile(std::string name);
   int setupGame();
   void runAllCommands();
+  std::vector<std::string> splitSentenceIntoWords(std::string c);
+  void winGame();
+  int loseGame();
+  void saveWorld(std::string name);
 
   // gets e sets
-  int GetTurn() { return turn; }
   World *GetWorld() const { return world; }
-  int GetYear() const { return year; }
-  void SetYear(int year) { this->year = year; }
 };
 
 #endif // __INTERACTION_H__

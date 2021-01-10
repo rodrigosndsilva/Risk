@@ -26,7 +26,7 @@ void Mountain::updateTerritoryProduction(int turn) {
   if (turn > 0) {
     if (GetConquered() == true) {
       SetContProductions(GetContProductions() + 1);
-      if (GetContProductions() > 2) {
+      if (GetContProductions() >= 2) {
         SetProductCreation(1);
       } else {
         SetProductCreation(0);

@@ -3,5 +3,4 @@ create fishing 1
 create fortress 1
 create plain 2
 create mountain 2
-take terr Plain1
 listall
